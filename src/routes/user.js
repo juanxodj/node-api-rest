@@ -7,16 +7,17 @@ import {
   destroy,
   factory,
 } from "../controllers/userController";
+import auth from "./../middleware/auth";
 /* import db from "./../../mysqlConfig"; */
 
 const router = express.Router();
 
-router.get("/", index);
-router.post("/", store);
-router.get("/:id", show);
-router.put("/:id", update);
-router.delete("/:id", destroy);
-router.get("/factory/users", factory);
+router.get("/", auth, index);
+router.post("/", auth, store);
+router.get("/:id", auth, show);
+router.put("/:id", auth, update);
+router.delete("/:id", auth, destroy);
+router.get("/factory/users", auth, factory);
 
 //MYSQL EXAMPLE
 /* router.get("/api/users", (req, res) => {

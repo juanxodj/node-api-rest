@@ -1,5 +1,6 @@
+import bcrypt from "bcrypt";
 import Address from "../models/address";
-import User from "./../models/user";
+import { User, validate } from "./../models/user";
 import { faker } from "@faker-js/faker";
 
 // Obtener todos los usuarios
@@ -30,10 +31,16 @@ const index = async (req, res) => {
 // Crear un nuevo usuario
 const store = async (req, res) => {
   try {
-    const user = await User.create(req.body);
+    const { error } = validate(req.body);
+    if (error) return res.status(400).json({ error: error.details });
 
-    // Crear direcciones para el usuario recién creado
-    const addresses = req.body.addresses || []; // Obtener las direcciones del cuerpo de la solicitud (si existen)
+    const { code, name, email, password } = req.body;
+
+    // Hash de la contraseña usando bcrypt
+    const hash = await bcrypt.hash(password, 10);
+    const user = await User.create({ code, name, email, password: hash });
+
+    const addresses = req.body.addresses || [];
     for (const address of addresses) {
       await createAddress(
         address.street,

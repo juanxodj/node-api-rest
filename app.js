@@ -5,6 +5,7 @@ import connectToDatabase from "./dbConfig";
 import routes from "./src/routes";
 import userRoutes from "./src/routes/user";
 import addressRoutes from "./src/routes/address";
+import authRoutes from "./src/routes/auth";
 import { PORT } from "./config.js";
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 app.use("/", routes);
 app.use("/users", userRoutes);
 app.use("/addresses", addressRoutes);
+app.use("/auth", authRoutes);
 
 // Inicia el servidor
 app.listen(PORT, () => {
