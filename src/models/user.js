@@ -3,6 +3,11 @@ import paginate from "mongoose-paginate-v2";
 import jwt from "jsonwebtoken";
 import Joi from "joi";
 
+const P_CREATE = "create user";
+const P_READ = "read user";
+const P_UPDATE = "update user";
+const P_DELETE = "delete user";
+
 const userSchema = new mongoose.Schema({
   code: { type: String, required: true, unique: true },
   name: { type: String, required: true },
@@ -37,4 +42,4 @@ const validate = (user) => {
   return schema.validate(user);
 };
 
-module.exports = { User, validate };
+module.exports = { User, validate, P_CREATE, P_READ, P_UPDATE, P_DELETE };
