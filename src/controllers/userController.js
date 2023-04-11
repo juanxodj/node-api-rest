@@ -11,7 +11,7 @@ const index = async (req, res) => {
     limit: parseInt(req.query.limit) || 10,
     select: req.query.select || "",
     sort: req.query.sort || {},
-    populate: ["addresses"],
+    populate: "addresses",
   };
 
   if (req.query.query) {

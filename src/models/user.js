@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   addresses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
+  role: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -26,6 +27,12 @@ const validate = (user) => {
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
+    addresses: Joi.array().optional().items({
+      street: Joi.string().required(),
+      city: Joi.string().required(),
+      state: Joi.string().required(),
+      zipCode: Joi.string().required(),
+    }),
   });
   return schema.validate(user);
 };
