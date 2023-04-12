@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
 import paginate from "mongoose-paginate-v2";
 
-const permissionSchema = new mongoose.Schema({
-  name: String,
-});
+const permissionSchema = new mongoose.Schema(
+  {
+    name: String,
+  },
+  { versionKey: false }
+);
 
 permissionSchema.plugin(paginate);
 

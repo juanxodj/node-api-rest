@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   addresses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
-  role: { type: mongoose.Schema.Types.ObjectId, ref: "Role" },
+  role: { type: mongoose.Schema.Types.ObjectId, ref: "Role", required: true },
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -38,6 +38,7 @@ const validate = (user) => {
       state: Joi.string().required(),
       zipCode: Joi.string().required(),
     }),
+    role: Joi.string().required(),
   });
   return schema.validate(user);
 };

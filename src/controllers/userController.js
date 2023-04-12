@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import Address from "../models/address";
 import { User, validate } from "./../models/user";
+import { Role } from "./../models/role";
+import Permission from "./../models/permission";
 import { faker } from "@faker-js/faker";
 
 // Obtener todos los usuarios
@@ -11,9 +13,10 @@ const index = async (req, res) => {
     limit: parseInt(req.query.limit) || 10,
     select: req.query.select || "",
     sort: req.query.sort || {},
-    populate: "addresses",
+    populate: ["addresses", "role"],
   };
 
+  // Example query 'name:juan|email:gmail'
   if (req.query.query) {
     const text = req.query.query;
     query = text.split("|").reduce((acc, pair) => {
@@ -31,47 +34,66 @@ const index = async (req, res) => {
 // Crear un nuevo usuario
 const store = async (req, res) => {
   try {
+    // Validación
     const { error } = validate(req.body);
     if (error) return res.status(400).json({ error: error.details });
 
     const { code, name, email, password } = req.body;
 
     // Hash de la contraseña usando bcrypt
+    const role = await Role.findOne({ name: req.body.role });
     const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({ code, name, email, password: hash });
-
+    const user = await User.create({
+      code,
+      name,
+      email,
+      role: role._id,
+      password: hash,
+    });
     const addresses = req.body.addresses || [];
+    const addressesIds = [];
+
     for (const address of addresses) {
-      await createAddress(
-        address.street,
-        address.city,
-        address.state,
-        address.zipCode,
-        user._id
-      );
+      const newAddress = await Address.create({
+        street: address.street,
+        city: address.city,
+        state: address.state,
+        zipCode: address.zipCode,
+        user: user._id,
+      });
+      addressesIds.push(newAddress._id);
     }
 
-    res.json(user);
+    await User.findByIdAndUpdate(user._id, {
+      addresses: addressesIds,
+    });
+
+    const userNew = await User.findById(user._id)
+      .populate("addresses")
+      .populate("role");
+
+    res.json(userNew);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-async function createAddress(street, city, state, zipCode, userId) {
-  const address = new Address({
-    street,
-    city,
-    state,
-    zipCode,
-    user: userId,
-  });
-  await address.save();
-}
-
 // Obtener un usuario por su ID
 const show = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).populate("addresses");
+    const user = await User.findById(req.params.id)
+      .populate({ path: "addresses", select: "-user" })
+      .populate({
+        path: "role",
+        populate: {
+          path: "permissions",
+          model: Permission,
+          //select: "name -_id",
+          transform: (doc) => {
+            return doc.name;
+          },
+        },
+      });
     res.json(user);
   } catch (error) {
     res.status(404).json({ error: "User not found" });
@@ -81,9 +103,7 @@ const show = async (req, res) => {
 // Actualizar un usuario
 const update = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
+    const user = await User.findByIdAndUpdate(req.params.id, req.body);
     res.json(user);
   } catch (error) {
     res.status(404).json({ error: "User not found" });
@@ -100,21 +120,28 @@ const destroy = async (req, res) => {
   }
 };
 
-const factory = async (req, res) => {
+const factory = async () => {
+  await User.deleteMany({});
+  const roleSuperAdmin = await Role.findOne({ name: "super admin" });
+  const roleAdmin = await Role.findOne({ name: "admin" });
+  const roleUser = await Role.findOne({ name: "user" });
   try {
     for (let i = 1; i <= 100; i++) {
+      const hash = await bcrypt.hash("123456", 10);
+      const roleId =
+        i === 1 ? roleSuperAdmin._id : i === 2 ? roleAdmin._id : roleUser._id;
       const data = {
         code: i,
         name: faker.name.fullName(),
         email: faker.internet.email(),
-        password: faker.internet.password(),
+        password: hash,
+        role: roleId,
       };
-      const user = await User.create(data);
-      console.log(user);
+      await User.create(data);
     }
-    res.json({ message: "Data generation completed" });
+    console.log("Data users generation completed");
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.log(error.message);
   }
 };
 
