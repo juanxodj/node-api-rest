@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 
-const permissionSchema = new mongoose.Schema(
+const permissionSchema = new Schema(
   {
     name: String,
   },
@@ -10,6 +10,6 @@ const permissionSchema = new mongoose.Schema(
 
 permissionSchema.plugin(paginate);
 
-const Permission = mongoose.model("Permission", permissionSchema);
+const Permission = model("Permission", permissionSchema);
 
 export default Permission;

@@ -1,5 +1,5 @@
-import { User } from "../models/user";
-import { Role } from "../models/role";
+import { User } from "@models/user";
+import { Role } from "@models/role";
 
 const hasPermission = (permissions) => async (req, res, next) => {
   try {
@@ -21,4 +21,4 @@ const hasPermission = (permissions) => async (req, res, next) => {
   }
 };
 
-module.exports = hasPermission;
+export default hasPermission;

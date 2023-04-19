@@ -1,4 +1,4 @@
-import { Role, ROL_SUPER_ADMIN, ROL_ADMIN, ROL_USER } from "../models/role";
+import { Role, ROL_SUPER_ADMIN, ROL_ADMIN, ROL_USER } from "@models/role";
 
 const data = [
   { name: ROL_SUPER_ADMIN },

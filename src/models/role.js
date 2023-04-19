@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 
 //Model Permissions
@@ -12,17 +12,17 @@ const ROL_SUPER_ADMIN = "super admin";
 const ROL_ADMIN = "admin";
 const ROL_USER = "user";
 
-const roleSchema = new mongoose.Schema({
+const roleSchema = new Schema({
   name: { type: String, required: true },
   // permissions: [String],
-  permissions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Permission" }],
+  permissions: [{ type: Schema.Types.ObjectId, ref: "Permission" }],
 });
 
 roleSchema.plugin(paginate);
 
-const Role = mongoose.model("Role", roleSchema);
+const Role = model("Role", roleSchema);
 
-module.exports = {
+export {
   Role,
   P_CREATE,
   P_READ,

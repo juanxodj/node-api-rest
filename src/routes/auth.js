@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
-import { User } from "../models/user";
 import Joi from "joi";
+import { User } from "@models/user";
 
 const router = express.Router();
 
@@ -34,4 +34,4 @@ const validate = (user) => {
   return schema.validate(user);
 };
 
-module.exports = router;
+export default router;

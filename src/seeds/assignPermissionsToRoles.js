@@ -1,5 +1,5 @@
-import Permission from "./../models/permission";
-import { Role } from "./../models/role";
+import Permission from "@models/permission";
+import { Role } from "@models/role";
 
 const assignPermissionsToRoles = async (req, res) => {
   let data = [];

@@ -5,8 +5,8 @@ import {
   show,
   update,
   destroy,
-} from "../controllers/userController";
-import auth from "./../middleware/auth";
+} from "@controllers/userController";
+import auth from "@src/middleware/auth";
 
 const router = express.Router();
 
@@ -16,4 +16,4 @@ router.get("/:id", auth, show);
 router.put("/:id", auth, update);
 router.delete("/:id", auth, destroy);
 
-module.exports = router;
+export default router;

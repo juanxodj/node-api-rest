@@ -7,4 +7,4 @@ router.get("/", (req, res) => {
   res.send("Bienvenido a mi página principal");
 });
 
-module.exports = router;
+export default router;

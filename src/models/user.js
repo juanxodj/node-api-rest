@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 import jwt from "jsonwebtoken";
 import Joi from "joi";
@@ -8,13 +8,13 @@ const P_READ = "read user";
 const P_UPDATE = "update user";
 const P_DELETE = "delete user";
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   code: { type: String, required: true, unique: true },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  addresses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
-  role: { type: mongoose.Schema.Types.ObjectId, ref: "Role", required: true },
+  addresses: [{ type: Schema.Types.ObjectId, ref: "Address" }],
+  role: { type: Schema.Types.ObjectId, ref: "Role", required: true },
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -24,7 +24,7 @@ userSchema.methods.generateAuthToken = function () {
 
 userSchema.plugin(paginate);
 
-const User = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
 
 const validate = (user) => {
   const schema = Joi.object({
@@ -43,4 +43,4 @@ const validate = (user) => {
   return schema.validate(user);
 };
 
-module.exports = { User, validate, P_CREATE, P_READ, P_UPDATE, P_DELETE };
+export { User, validate, P_CREATE, P_READ, P_UPDATE, P_DELETE };

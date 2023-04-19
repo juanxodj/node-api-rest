@@ -1,5 +1,5 @@
-import Permission from "../models/permission";
-import { P_CREATE, P_READ, P_UPDATE, P_DELETE } from "../models/user";
+import Permission from "@models/permission";
+import { P_CREATE, P_READ, P_UPDATE, P_DELETE } from "@models/user";
 
 const data = [
   { name: P_CREATE },

@@ -1,4 +1,4 @@
-import Address from "../models/address";
+import Address from "@models/address";
 
 const index = async (req, res) => {
   let query = {};

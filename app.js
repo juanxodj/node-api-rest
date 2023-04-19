@@ -1,18 +1,20 @@
+import "module-alias/register";
 import express from "express";
-import bodyParser from "body-parser";
+import cors from "cors";
 
-import connectToDatabase from "./src/config/database";
-import routes from "./src/routes";
-import userRoutes from "./src/routes/user";
-import addressRoutes from "./src/routes/address";
-import authRoutes from "./src/routes/auth";
-import { PORT } from "./src/config/env";
+import connectToDatabase from "@src/config/database";
+import routes from "@src/routes";
+import userRoutes from "@src/routes/user";
+import addressRoutes from "@src/routes/address";
+import authRoutes from "@src/routes/auth";
+import { PORT } from "@src/config/env";
 
 const app = express();
 connectToDatabase();
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
 
 // Routes
 app.use("/", routes);

@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
-import Address from "../models/address";
-import { User, validate } from "./../models/user";
-import { Role } from "./../models/role";
-import Permission from "./../models/permission";
+import Address from "@models/address";
+import { User, validate } from "@models/user";
+import { Role } from "@models/role";
+import Permission from "@models/permission";
 import { faker } from "@faker-js/faker";
 
 // Obtener todos los usuarios
