@@ -7,6 +7,7 @@ import routes from "@src/routes";
 import userRoutes from "@src/routes/user";
 import addressRoutes from "@src/routes/address";
 import authRoutes from "@src/routes/auth";
+import afipRoutes from "@src/routes/afip";
 import { PORT } from "@src/config/env";
 
 const app = express();
@@ -21,6 +22,7 @@ app.use("/", routes);
 app.use("/users", userRoutes);
 app.use("/addresses", addressRoutes);
 app.use("/auth", authRoutes);
+app.use("/afip", afipRoutes);
 
 // Start Server
 app.listen(PORT, () => {
